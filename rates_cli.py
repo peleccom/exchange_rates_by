@@ -18,21 +18,20 @@ if __name__ == '__main__':
     only_sell = args.sell
     only_buy = args.buy
     
-    rows = MyfinClient().get_rates(currency)
+    rows = MyfinClient().get_rates(currency, bank)
     for row in rows:
         bank_name = row['name']
         rate = row['rate']
         
         show_components = []
 
-        if not bank or bank == bank_name:
-            if not bank:
-                show_components.append(bank_name)
-            if not only_buy and not only_sell:
-                show_components.append(rate.buy)
-                show_components.append(rate.sell)
-            elif only_buy:
-                show_components.append(rate.buy)
-            elif only_sell:
-                show_components.append(rate.sell)
-            print(*show_components)
+        if not bank:
+            show_components.append(bank_name)
+        if not only_buy and not only_sell:
+            show_components.append(rate.buy)
+            show_components.append(rate.sell)
+        elif only_buy:
+            show_components.append(rate.buy)
+        elif only_sell:
+            show_components.append(rate.sell)
+        print(*show_components)

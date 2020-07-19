@@ -22,7 +22,7 @@ class ExchangeRate:
 
 class MyfinClient:
     
-    def get_rates(self, currency):
+    def get_rates(self, currency, bank=None):
         if currency not in AVAILAIBLE_CURRENCIES:
             raise ValueError(f'invalid currency code {currency}')
             
@@ -36,11 +36,12 @@ class MyfinClient:
         
         best_rates_rows = best_rates_table.find('tbody').find_all('tr')
         nbrb_bank_name = 'НБ РБ'
-        for best_rates_row in best_rates_rows:
-            cells = best_rates_row.find_all('td')
-            best_rates_currency = cells[0].find('a', href=True)['href'].replace('/currency/','')
-            if (currency == 'rub100' and best_rates_currency== 'rub') or (best_rates_currency == currency):
-                result.append(dict(name=nbrb_bank_name, rate=ExchangeRate(Decimal(cells[3].text), Decimal(0))))
+        if not bank or bank == nbrb_bank_name:
+            for best_rates_row in best_rates_rows:
+                cells = best_rates_row.find_all('td')
+                best_rates_currency = cells[0].find('a', href=True)['href'].replace('/currency/','')
+                if (currency == 'rub100' and best_rates_currency== 'rub') or (best_rates_currency == currency):
+                    result.append(dict(name=nbrb_bank_name, rate=ExchangeRate(Decimal(cells[3].text), Decimal(0))))
         rates_table = soup.body.find('div', class_='page_currency').find('table', class_ = 'rates-table-sort')
         
         cols = rates_table.find('thead').find_all('th', class_='cur-name')
@@ -56,6 +57,8 @@ class MyfinClient:
         for bank_line in bank_lines:
             cells = bank_line.find_all('td')
             bank_name = cells[0].text.strip()
+            if bank and bank != bank_name:
+                continue
             buy = Decimal(cells[1 + col_index * 2].text)
             sell = Decimal(cells[1 + col_index * 2 + 1].text)
             result.append(dict(name=bank_name, rate=ExchangeRate(buy, sell)))
@@ -92,15 +95,4 @@ class TutByFinanceClient:
 
         items = self.normalize_rate(items)
         return items
-
-        
-if __name__ == '__main__':         
-    rows = MyfinClient().get_rates('usd')
-    for row in rows:
-        name = row['name']
-        rate = row['rate']
-        print(name, rate.buy, rate.sell)
-    
-    
-    print(TutByFinanceClient().hist('eur'))
    
