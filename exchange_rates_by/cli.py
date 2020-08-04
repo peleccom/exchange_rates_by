@@ -1,7 +1,12 @@
+"""Console script for exchange_rates_by."""
 import argparse
-from rates import MyfinClient
-                    
-if __name__ == '__main__':
+import sys
+
+from exchange_rates_by import MyfinClient
+
+
+def main():
+    """Console script for exchange_rates_by."""
     parser = argparse.ArgumentParser(description='Получить актуальный курс валют')
     parser.add_argument('currency',
         help='currency code', choices=['usd', 'eur', 'rub100'])
@@ -17,12 +22,12 @@ if __name__ == '__main__':
     bank = args.bank
     only_sell = args.sell
     only_buy = args.buy
-    
+
     rows = MyfinClient().get_rates(currency, bank)
     for row in rows:
         bank_name = row['name']
         rate = row['rate']
-        
+
         show_components = []
 
         if not bank:
@@ -35,3 +40,8 @@ if __name__ == '__main__':
         elif only_sell:
             show_components.append(rate.sell)
         print(*show_components)
+        return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())  # pragma: no cover

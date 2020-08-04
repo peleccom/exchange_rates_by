@@ -1,5 +1,5 @@
 import re
-import json 
+import json
 import datetime
 from decimal import Decimal
 import requests
@@ -21,19 +21,19 @@ class ExchangeRate:
         self.sell = sell
 
 class MyfinClient:
-    
+
     def get_rates(self, currency, bank=None):
         if currency not in AVAILAIBLE_CURRENCIES:
             raise ValueError(f'invalid currency code {currency}')
-            
-        result = []        
+
+        result = []
         url = f'https://myfin.by/currency/{CITY}'
-        headers = {'User-Agent': generate_user_agent(device_type="desktop", os=('mac', 'linux'))}        
+        headers = {'User-Agent': generate_user_agent(device_type="desktop", os=('mac', 'linux'))}
         response = requests.get(url, headers=headers)
         soup = BeautifulSoup(response.text, 'lxml')
-        
+
         best_rates_table = soup.body.find('div', class_='best-rates').find('table')
-        
+
         best_rates_rows = best_rates_table.find('tbody').find_all('tr')
         nbrb_bank_name = 'НБ РБ'
         if not bank or bank == nbrb_bank_name:
@@ -43,12 +43,12 @@ class MyfinClient:
                 if (currency == 'rub100' and best_rates_currency== 'rub') or (best_rates_currency == currency):
                     result.append(dict(name=nbrb_bank_name, rate=ExchangeRate(Decimal(cells[3].text), Decimal(0))))
         rates_table = soup.body.find('div', class_='page_currency').find('table', class_ = 'rates-table-sort')
-        
+
         cols = rates_table.find('thead').find_all('th', class_='cur-name')
         currencies = []
         for col in cols:
             currencies.append(col.text)
-        
+
         bank_lines = rates_table.find_all('tr', class_='tr-tb')
         col_index = currencies.index(currency)
         if col_index == -1:
@@ -63,7 +63,7 @@ class MyfinClient:
             sell = Decimal(cells[1 + col_index * 2 + 1].text)
             result.append(dict(name=bank_name, rate=ExchangeRate(buy, sell)))
         return result
-    
+
 class TutByFinanceClient:
 
     def normalize_rate(self, items):
@@ -95,4 +95,3 @@ class TutByFinanceClient:
 
         items = self.normalize_rate(items)
         return items
-   
