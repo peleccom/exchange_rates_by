@@ -84,7 +84,7 @@ class TutByFinanceClient:
         response_text = response.text
         mre = re.search(r'\=(\[.*\])', response_text)
         if not mre:
-            raise ValueError('wong response')
+            raise ValueError('wrong response')
         json_str = mre.group(1)
         items = json.loads(json_str)
 

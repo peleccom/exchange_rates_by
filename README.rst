@@ -20,7 +20,7 @@ Exchange rates by
 
 
 
-Currency excchange 
+Belarus currency exchanges library
 
 
 * Free software: MIT license

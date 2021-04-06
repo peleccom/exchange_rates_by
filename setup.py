@@ -36,7 +36,7 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="Currency excchange ",
+    description="Belarus currency exchanges library",
     entry_points={
         'console_scripts': [
             'exchange_rates_by=exchange_rates_by.cli:main',

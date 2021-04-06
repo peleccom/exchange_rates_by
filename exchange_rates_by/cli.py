@@ -1,3 +1,4 @@
+#/env/bin python3
 """Console script for exchange_rates_by."""
 import argparse
 import sys
@@ -10,7 +11,7 @@ def main():
     parser = argparse.ArgumentParser(description='Получить актуальный курс валют')
     parser.add_argument('currency',
         help='currency code', choices=['usd', 'eur', 'rub100'])
-    parser.add_argument('--bank',
+    parser.add_argument('-b', '--bank',
         help='filter by bank')
 
     group = parser.add_mutually_exclusive_group()
