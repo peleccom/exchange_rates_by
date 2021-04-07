@@ -2,10 +2,11 @@
 
 """Tests for `exchange_rates_by` package."""
 
+from exchange_rates_by import MyfinClient
 import pytest
 
 
-from exchange_rates_by import exchange_rates_by
+# from exchange_rates_by import exchange_rates_by
 
 
 @pytest.fixture
@@ -22,3 +23,6 @@ def test_content(response):
     """Sample pytest test function with the pytest fixture as an argument."""
     # from bs4 import BeautifulSoup
     # assert 'GitHub' in BeautifulSoup(response.content).title.string
+
+def test_myfin():
+    assert 2+2 == 4
