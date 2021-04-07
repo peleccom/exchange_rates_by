@@ -25,4 +25,4 @@ def test_content(response):
     # assert 'GitHub' in BeautifulSoup(response.content).title.string
 
 def test_myfin():
-    assert 2+2 == 4
+    assert 2+3 == 5
