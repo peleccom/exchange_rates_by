@@ -24,10 +24,10 @@ class MyfinClient:
 
     def get_rates(self, currency, bank=None):
         if currency not in AVAILAIBLE_CURRENCIES:
-            raise ValueError(f'invalid currency code {currency}')
+            raise ValueError('invalid currency code {currency}'.format(currency=currency))
 
         result = []
-        url = f'https://myfin.by/currency/{CITY}'
+        url = 'https://myfin.by/currency/{city}'.format(city=CITY)
         headers = {'User-Agent': generate_user_agent(device_type="desktop", os=('mac', 'linux'))}
         response = requests.get(url, headers=headers)
         soup = BeautifulSoup(response.text, 'lxml')
@@ -52,7 +52,7 @@ class MyfinClient:
         bank_lines = rates_table.find_all('tr', class_='tr-tb')
         col_index = currencies.index(currency)
         if col_index == -1:
-           raise ValueError(f'invalid currency code {currency}')
+           raise ValueError('invalid currency code {currency}'.format(currency=currency))
 
         for bank_line in bank_lines:
             cells = bank_line.find_all('td')
@@ -75,11 +75,11 @@ class TutByFinanceClient:
 
     def hist(self, currency):
         if currency not in AVAILAIBLE_CURRENCIES:
-            raise ValueError(f'invalid currency code {currency}')
+            raise ValueError('invalid currency code {currency}'.format(currency=currency))
         cur = currency
         if cur == 'rub100':
             cur = 'rub'
-        response = requests.get(f'https://finance.tut.by/informer/amstock/{cur}.js')
+        response = requests.get('https://finance.tut.by/informer/amstock/{cur}.js'.format(cur=cur))
         response.raise_for_status()
         response_text = response.text
         mre = re.search(r'\=(\[.*\])', response_text)
